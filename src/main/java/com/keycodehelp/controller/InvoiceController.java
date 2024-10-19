@@ -5,14 +5,14 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 
 import com.keycodehelp.entities.Invoice;
 import com.keycodehelp.services.InvoiceService;
 
 @CrossOrigin(origins = "http://localhost:3000")  // Adjust this to the frontend's URL if needed
-@RestController
+@Controller
 @RequestMapping("/invoices")
 public class InvoiceController {
 
@@ -40,8 +40,12 @@ public class InvoiceController {
 
     // Endpoint to retrieve all invoices
     @GetMapping
-    public List<Invoice> getAllInvoices() {
-        return invoiceService.getAllInvoices();
+    public ResponseEntity<List<Invoice>> getAllInvoices() {
+        List<Invoice> invoices = invoiceService.getAllInvoices();
+        if (invoices.isEmpty()) {
+            return ResponseEntity.noContent().build();  // Return 204 if no content
+        }
+        return ResponseEntity.ok(invoices);
     }
 
     // Endpoint to update an existing invoice

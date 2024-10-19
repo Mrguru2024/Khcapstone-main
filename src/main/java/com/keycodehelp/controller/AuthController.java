@@ -1,41 +1,113 @@
 package com.keycodehelp.controller;
 
-import com.keycodehelp.dto.AuthenticationRequest;  // Corrected to use dto package
-import com.keycodehelp.dto.AuthenticationResponse;  // Corrected to use dto package
-import com.keycodehelp.security.JwtUtil;
-import com.keycodehelp.services.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.keycodehelp.entities.User;
+import com.keycodehelp.services.UserService;
+import lombok.Getter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api/auth")
+@Controller
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    @Getter
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    public AuthController(AuthenticationManager authenticationManager, UserService userService, PasswordEncoder passwordEncoder) {
+        this.authenticationManager = authenticationManager;
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    // Display login page
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login";  // Render the login.html Thymeleaf template
+    }
 
+    // Handle login submission
     @PostMapping("/login")
-    public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    public String login(@RequestParam("username") String username,
+                        @RequestParam("password") String password,
+                        Model model) {
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+            // Authenticate the user
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password)
             );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Redirect to dashboard based on user role
+            if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                return "redirect:/admin";  // Admin dashboard
+            } else {
+                return "redirect:/user-dashboard";  // User dashboard
+            }
         } catch (Exception e) {
-            throw new Exception("Incorrect username or password", e);
+            model.addAttribute("error", "Invalid username or password");
+            return "login";  // Send back to login page in case of error
         }
+    }
 
-        final UserDetails userDetails = customUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+    // Display registration page
+    @GetMapping("/auth/register" + "/register")
+    public String showRegistrationPage() {
+        return "register";  // Render the register.html Thymeleaf template
+    }
 
-        return new AuthenticationResponse(jwt);
+    // Handle user registration
+    @PostMapping("/auth/register")
+    public String handleRegistration(@ModelAttribute User user, Model model) {
+        try {
+            // Encode the user's password before saving it
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+            // Save the registered user to the database using UserService
+            userService.saveUser(user, "ROLE_USER");  // Assign ROLE_USER to the new user
+
+            // Automatically log the user in after successful registration
+            UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+
+            // Authenticate the user
+            Authentication authentication = authenticationManager.authenticate(authToken);
+
+            // Set the authentication in the security context
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Redirect the user to the dashboard after registration and login
+            return "redirect:/user-dashboard";
+        } catch (Exception e) {
+            e.printStackTrace();  // Log the error for debugging purposes
+            model.addAttribute("error", "There was an error during registration.");
+            return "register";  // Send back to the register page in case of error
+        }
+    }
+
+    // Admin dashboard
+    @GetMapping("/admin")
+    public String adminDashboard(Model model) {
+        model.addAttribute("pageTitle", "Admin Dashboard");
+        return "admin";  // Render the admin.html Thymeleaf template
+    }
+
+    @GetMapping("/admin/tasks")
+    public String adminTasks(Model model) {
+        model.addAttribute("pageTitle", "Admin Tasks");
+        return "admin_tasks";  // Render the admin_tasks.html Thymeleaf template
+    }
+
+    // User dashboard
+    @GetMapping("/user-dashboard")
+    public String userDashboard(Model model) {
+        model.addAttribute("pageTitle", "User Dashboard");
+        return "user-dashboard";  // Render the user-dashboard.html Thymeleaf template
     }
 }

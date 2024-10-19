@@ -1,10 +1,15 @@
 package com.keycodehelp.entities;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
+
+@Setter
+@Getter
 @Entity
-@Table(name = "keycode")
+@Table(name = "keycodes")
 public class Keycode {
 
     @Id
@@ -18,61 +23,34 @@ public class Keycode {
     private String keycode;
 
     @Column(nullable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     // Default constructor
-    public Keycode() {}
+    public Keycode() {
+    }
 
-    // Constructor with arguments
-    public Keycode(String vin, String keycode, Date createdAt, User user) {
+    // Constructor for creating a Keycode with a generated keycode
+    public Keycode(String vin, String keycode, User user) {
         this.vin = vin;
         this.keycode = keycode;
-        this.createdAt = createdAt;
         this.user = user;
     }
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getVin() {
-        return vin;
-    }
-
-    public void setVin(String vin) {
+    // Constructor for creating a Keycode with a specified createdAt time
+    public Keycode(String vin, String keycode, LocalDateTime createdAt, User user) {
         this.vin = vin;
-    }
-
-    public String getKeycode() {
-        return keycode;
-    }
-
-    public void setKeycode(String keycode) {
         this.keycode = keycode;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
+        this.createdAt = createdAt;  // Use provided createdAt time
         this.user = user;
+    }
+
+    // Automatically set createdAt before persisting
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now(); // Set createdAt to the current time
     }
 }

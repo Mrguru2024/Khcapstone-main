@@ -1,16 +1,14 @@
 package com.keycodehelp.entities;
 
 import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "vin_requests")
+@Getter
+@Setter
 public class VINRequest {
 
     @Id
@@ -26,28 +24,24 @@ public class VINRequest {
     @Column(nullable = false)
     private LocalDateTime requestTime;
 
-    // Getters and Setters
-    public String getVin() {
-        return vin;
-    }
+    // Optional: Track the user who made the request
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    public void setVin(String vin) {
+    // Optional: Status of the request
+    @Column(nullable = false)
+    private String status;
+
+    // Default Constructor
+    public VINRequest() {}
+
+    // Parameterized Constructor (if needed)
+    public VINRequest(String vin, String keycodeResponse, LocalDateTime requestTime, User user, String status) {
         this.vin = vin;
-    }
-
-    public String getKeycodeResponse() {
-        return keycodeResponse;
-    }
-
-    public void setKeycodeResponse(String keycodeResponse) {
         this.keycodeResponse = keycodeResponse;
-    }
-
-    public LocalDateTime getRequestTime() {
-        return requestTime;
-    }
-
-    public void setRequestTime(LocalDateTime requestTime) {
         this.requestTime = requestTime;
+        this.user = user;
+        this.status = status;
     }
 }

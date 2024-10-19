@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface KeycodeRequestRepository extends JpaRepository<KeycodeRequest, Long> {
     List<KeycodeRequest> findByUserId(Long userId);
+
+
+
 }

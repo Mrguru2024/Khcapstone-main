@@ -1,52 +1,84 @@
 package com.keycodehelp.services;
 
+import com.keycodehelp.entities.Role;
 import com.keycodehelp.entities.User;
 import com.keycodehelp.repositories.UserRepository;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
+@Transactional
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    // Constructor for UserService with dependency injection
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
+        this.userRepository = userRepository;
+        this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
+    // Find a user by username
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    // Check if username or email already exists
+    public boolean existsByUsernameOrEmail(String username, String email) {
+        return userRepository.existsByUsername(username) || userRepository.existsByEmail(email);
+    }
+
+    // Save a new user and assign roles
+    public User saveUser(User user, String roleName) {
+        // Find the role by name
+        Role role = roleService.getRoleByName(roleName);
+        // Hash the user's password before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (role == null) {
+            throw new IllegalArgumentException("Role not found: " + roleName);
+        }
+
+        // Add the role to the user's roles
+        user.getRoles().add(role);
+
+        // Encode the user's password before saving
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // Save and return the user entity
+        return userRepository.save(user);
+    }
+
+    // Save a user without passing a role name (roles should already be assigned)
     public User saveUser(User user) {
-        // Hash the password before saving
+        // Encode the password if it's not already encoded
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    public User updateUser(Long id, User userDetails) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        user.setUsername(userDetails.getUsername());
-        user.setEmail(userDetails.getEmail());
-
-        if (!userDetails.getPassword().isEmpty()) {
-            user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+    // Method to delete a user by username or email
+    public boolean deleteUserByUsernameOrEmail(String username, String email) {
+        Optional<User> userOpt;
+        if (email != null) {
+            userOpt = userRepository.findByEmail(email);
+        } else {
+            userOpt = userRepository.findByUsername(username);
         }
 
-        return userRepository.save(user);
+        if (userOpt.isPresent()) {
+            userRepository.delete(userOpt.get());
+            return true;
+        }
+        return false;
     }
 
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
-
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    // Find role by name using RoleService
+    public Optional<Role> findRoleByName(String roleName) {
+        return Optional.ofNullable(roleService.getRoleByName(roleName));
     }
 }

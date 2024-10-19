@@ -5,32 +5,34 @@ import com.keycodehelp.entities.KeycodeRequest;
 import com.keycodehelp.entities.User;
 import com.keycodehelp.repositories.KeycodeRepository;
 import com.keycodehelp.repositories.KeycodeRequestRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class KeycodeService {
 
-    @Autowired
-    private KeycodeRepository keycodeRepository;
+    private final KeycodeRepository keycodeRepository;
+    private final KeycodeRequestRepository keycodeRequestRepository;
 
-    @Autowired
-    private KeycodeRequestRepository keycodeRequestRepository;
+    // Constructor-based injection
+    public KeycodeService(KeycodeRepository keycodeRepository, KeycodeRequestRepository keycodeRequestRepository) {
+        this.keycodeRepository = keycodeRepository;
+        this.keycodeRequestRepository = keycodeRequestRepository;
+    }
 
     // Convert VIN to Keycode and log the request
     public Keycode convertVinToKeycode(String vin, User user) {
+        // Generate the keycode
         String generatedKeycode = "KEY-" + vin.toUpperCase();
 
-        // Create a new Keycode entity and save it
-        Keycode keycode = new Keycode(vin, generatedKeycode, new Date(), user);
+        // Create a new Keycode entity
+        Keycode keycode = new Keycode(vin, generatedKeycode, user); // Use the constructor with three parameters
         keycodeRepository.save(keycode);
 
         // Log the request in KeycodeRequest
-        KeycodeRequest request = new KeycodeRequest(vin, new Date(), user);
+        KeycodeRequest request = new KeycodeRequest(vin, user);  // LocalDateTime is set automatically
         keycodeRequestRepository.save(request);
 
         return keycode;

@@ -2,46 +2,45 @@ package com.keycodehelp.controller;
 
 import com.keycodehelp.entities.User;
 import com.keycodehelp.services.UserService;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:3000")
-@RestController
+@Controller
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    // Endpoint to create a new user and assign a role
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-        User savedUser = userService.saveUser(user);
+    public ResponseEntity<User> createUser(@RequestBody User user, @RequestParam String roleName) {
+        User savedUser = userService.saveUser(user, roleName);
         return ResponseEntity.ok(savedUser);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        return user.map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+    // Other endpoints
+    // Delete user by username or email
+    @PostMapping("/delete")
+    public ResponseEntity<String> deleteUser(@RequestParam("username") String username, @RequestParam("email") Optional<String> email) {
+        try {
+            boolean deleted = userService.deleteUserByUsernameOrEmail(username, email.orElse(null));
+            if (deleted) {
+                return ResponseEntity.ok("User deleted successfully.");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the user.");
+        }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        User updatedUser = userService.updateUser(id, userDetails);
-        return ResponseEntity.ok(updatedUser);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
-    }
 }

@@ -5,39 +5,57 @@ import com.keycodehelp.entities.KeycodeRequest;
 import com.keycodehelp.entities.User;
 import com.keycodehelp.services.KeycodeService;
 import com.keycodehelp.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 
-@RestController  // Ensures this is a REST controller
-@RequestMapping("/api/keycode")
+@Controller
+@RequestMapping("/keycode")
 public class KeycodeController {
 
-    @Autowired
-    private KeycodeService keycodeService;
+    private final KeycodeService keycodeService;
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
+    public KeycodeController(KeycodeService keycodeService, UserService userService) {
+        this.keycodeService = keycodeService;
+        this.userService = userService;
+    }
 
     // Endpoint to convert VIN to Keycode
     @PostMapping("/convert")
-    public Keycode convertVinToKeycode(@RequestParam String vin, Principal principal) {
+    public ResponseEntity<Keycode> convertVinToKeycode(@RequestParam String vin, Principal principal) {
         // Get the currently authenticated user
-        User user = userService.findByUsername(principal.getName());
+        User user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Call service to convert VIN to keycode
-        return keycodeService.convertVinToKeycode(vin, user);
+        Keycode keycode = keycodeService.convertVinToKeycode(vin, user);
+
+        // If the keycode could not be generated, return a 404 response
+        if (keycode == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(keycode);
     }
 
     // Endpoint to retrieve the keycode request history for the current user
     @GetMapping("/history")
-    public List<KeycodeRequest> getKeycodeHistory(Principal principal) {
+    public ResponseEntity<List<KeycodeRequest>> getKeycodeHistory(Principal principal) {
         // Get the currently authenticated user
-        User user = userService.findByUsername(principal.getName());
+        User user = userService.findByUsername(principal.getName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Call service to get keycode request history
-        return keycodeService.getKeycodeHistory(user);
+        List<KeycodeRequest> history = keycodeService.getKeycodeHistory(user);
+
+        if (history.isEmpty()) {
+            return ResponseEntity.noContent().build();  // Return 204 No Content if history is empty
+        }
+
+        return ResponseEntity.ok(history);
     }
 }

@@ -18,12 +18,4 @@ public class KeycodehelpBackendApplicationTests {
     public void contextLoads() {
         // Test that the application context loads without issues.
     }
-
-    public LoginService getLoginService() {
-        return loginService;
-    }
-
-    public void setLoginService(LoginService loginService) {
-        this.loginService = loginService;
-    }
 }

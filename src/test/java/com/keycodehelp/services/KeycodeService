@@ -1,0 +1,45 @@
+package com.keycodehelp.services;
+
+import com.keycodehelp.entities.Keycode;
+import com.keycodehelp.repositories.KeycodeRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class KeycodeService {
+
+    private final KeycodeRepository keycodeRepository;
+
+    // Constructor-based dependency injection
+    public KeycodeService(KeycodeRepository keycodeRepository) {
+        this.keycodeRepository = keycodeRepository;
+    }
+
+    // Retrieve all Keycodes
+    public List<Keycode> getAllKeycodes() {
+        return keycodeRepository.findAll();
+    }
+
+    // Retrieve a Keycode entity by its ID
+    public Optional<Keycode> getKeycodeById(Long id) {
+        return keycodeRepository.findById(id);
+    }
+
+    // Save a new Keycode
+    public Keycode saveKeycode(Keycode keycode) {
+        return keycodeRepository.save(keycode);
+    }
+
+    // Example method for generating a Keycode
+    public Keycode generateKeycode(String vin) {
+        // Example logic for generating a keycode
+        String generatedKey = "KEY-" + vin.toUpperCase(); // Simple generation logic
+        Keycode keycode = new Keycode(); // Adjust as per your Keycode entity structure
+        keycode.setVin(vin);
+        keycode.setKey(generatedKey);
+        // Additional logic to set other properties if necessary
+        return saveKeycode(keycode);
+    }
+}
