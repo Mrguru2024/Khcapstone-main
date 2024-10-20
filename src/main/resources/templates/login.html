@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <!-- Corrected the link to reference Thymeleaf for static resources -->
+    <!-- Correct the link to reference Thymeleaf for static resources -->
     <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
@@ -14,6 +14,17 @@
 <main>
     <section class="container">
         <h2>Login Page</h2>
+
+        <!-- Display session expired message -->
+        <div th:if="${param.sessionExpired}">
+            <p style="color: red;">Your session has expired. Please log in again.</p>
+        </div>
+
+        <!-- Display error message if there is one -->
+        <div th:if="${param.error}">
+            <p th:text="'Invalid username or password!'" style="color: red;"></p>
+        </div>
+
         <form th:action="@{/login}" method="post"> <!-- Use Thymeleaf th:action for form action -->
             <label>
                 <input type="text" name="username" placeholder="Username" required/>
@@ -21,9 +32,6 @@
             <label>
                 <input type="password" name="password" placeholder="Password" required/>
             </label>
-            <div th:if="${error}">
-                <p th:text="${error}" style="color: red;"></p>
-            </div>
 
             <!-- Add CSRF token -->
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
@@ -34,7 +42,6 @@
                 Don't have an account? Register here!
             </a>
         </form>
-
     </section>
 </main>
 </body>

@@ -24,36 +24,23 @@ public class KeycodeController {
         this.userService = userService;
     }
 
-    // Endpoint to convert VIN to Keycode
-    @PostMapping("/convert")
+    @PostMapping("/keycode/convert")
     public ResponseEntity<Keycode> convertVinToKeycode(@RequestParam String vin, Principal principal) {
-        // Get the currently authenticated user
         User user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Call service to convert VIN to keycode
         Keycode keycode = keycodeService.convertVinToKeycode(vin, user);
-
-        // If the keycode could not be generated, return a 404 response
-        if (keycode == null) {
-            return ResponseEntity.notFound().build();
-        }
-
         return ResponseEntity.ok(keycode);
     }
 
-    // Endpoint to retrieve the keycode request history for the current user
-    @GetMapping("/history")
+    @GetMapping("/keycode/history")
     public ResponseEntity<List<KeycodeRequest>> getKeycodeHistory(Principal principal) {
-        // Get the currently authenticated user
         User user = userService.findByUsername(principal.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Call service to get keycode request history
         List<KeycodeRequest> history = keycodeService.getKeycodeHistory(user);
-
         if (history.isEmpty()) {
-            return ResponseEntity.noContent().build();  // Return 204 No Content if history is empty
+            return ResponseEntity.noContent().build();
         }
 
         return ResponseEntity.ok(history);

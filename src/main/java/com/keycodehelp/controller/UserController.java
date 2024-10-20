@@ -21,7 +21,7 @@ public class UserController {
     }
 
     // Endpoint to create a new user and assign a role
-    @PostMapping
+    @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user, @RequestParam String roleName) {
         User savedUser = userService.saveUser(user, roleName);
         return ResponseEntity.ok(savedUser);
@@ -29,7 +29,7 @@ public class UserController {
 
     // Other endpoints
     // Delete user by username or email
-    @PostMapping("/delete")
+    @PostMapping("/users/delete")
     public ResponseEntity<String> deleteUser(@RequestParam("username") String username, @RequestParam("email") Optional<String> email) {
         try {
             boolean deleted = userService.deleteUserByUsernameOrEmail(username, email.orElse(null));

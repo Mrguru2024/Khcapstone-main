@@ -1,4 +1,4 @@
-/* General reset */
+/* Reset */
 * {
     margin: 0;
     padding: 0;
@@ -22,94 +22,66 @@ header {
     padding: 15px 0;
     text-align: center;
 }
+
 /* Navigation bar */
 nav {
     background-color: #333;
     position: fixed;
-    top: 0; /* Sticks the navigation to the top */
-    width: 100%; /* Ensures the navigation spans the entire width of the viewport */
-    z-index: 1000; /* Stays on top of other elements */
-    /* Navigation bar */
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
 
-    nav ul {
-        list-style: none;
-        display: flex;
-        justify-content: center;
-        background-color: #333;
-    }
+/* Navigation menu */
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    background-color: #333;
+}
 
-    nav ul li {
-        margin: 0 15px;
-        position: relative; /* Needed for the dropdown */
-    }
+nav ul li {
+    margin: 0 15px;
+}
 
-    nav ul li a {
-        color: white;
-        text-decoration: none;
-        padding: 10px 20px;
-        font-size: 18px;
-    }
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    display: block;
+}
 
-    nav ul li a:hover {
-        background-color: #555;
-        border-radius: 5px;
-    }
+nav ul li a:hover {
+    background-color: #575757;
+    border-radius: 5px;
+}
 
-    /* Dropdown Menu */
+/* Main container */
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 80px; /* Push content below the fixed navbar */
+}
 
-    .dropdown {
-        position: relative;
-    }
+/* Section styling */
+section {
+    margin-bottom: 20px;
+}
 
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        z-index: 1;
-    }
+/* Buttons */
+.button {
+    background-color: #0056b3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
 
-    .dropdown-content a {
-        color: #333;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-    }
-
-    .dropdown-content a:hover {
-        background-color: #f1f1f1;
-    }
-
-    /* Show dropdown on hover */
-
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
-
-    /* Main content */
-
-    .container {
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
-    }
-
-    /* Buttons */
-
-    .button, button {
-        background-color: #0056b3;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        text-decoration: none;
-    }
-
-    .button:hover, button:hover {
-        background-color: #004494;
-    }
+.button:hover {
+    background-color: #004494;
 }

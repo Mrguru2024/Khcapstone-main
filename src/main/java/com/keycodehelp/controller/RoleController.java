@@ -20,21 +20,21 @@ public class RoleController {
     }
 
     // Endpoint to create a new role
-    @PostMapping
+    @PostMapping("/roles")
     public ResponseEntity<Role> createRole(@RequestBody Role role) {
         Role newRole = roleService.createRole(role);
         return new ResponseEntity<>(newRole, HttpStatus.CREATED);  // Return 201 Created
     }
 
     // Endpoint to retrieve all roles
-    @GetMapping
+    @GetMapping("/roles")
     public ResponseEntity<List<Role>> getAllRoles() {
         List<Role> roles = roleService.getAllRoles();
         return ResponseEntity.ok(roles);
     }
 
     // Endpoint to retrieve a role by ID
-    @GetMapping("/{id}")
+    @GetMapping("/roles/{id}")
     public ResponseEntity<Role> getRoleById(@PathVariable Long id) {
         Role role = roleService.getRoleById(id);
         if (role != null) {
@@ -45,18 +45,7 @@ public class RoleController {
     }
 
     // Endpoint to update a role
-    @PutMapping("/{id}")
-    public ResponseEntity<Role> updateRole(@PathVariable Long id, @RequestBody Role roleDetails) {
-        Role updatedRole = roleService.updateRole(id, roleDetails);
-        if (updatedRole != null) {
-            return ResponseEntity.ok(updatedRole);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // Return 404 if role not found
-        }
-    }
-
-    // Endpoint to delete a role
-    @DeleteMapping("/{id}")
+    @PutMapping("/roles/{id}")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         boolean isDeleted = roleService.deleteRole(id);
         if (isDeleted) {
@@ -65,4 +54,5 @@ public class RoleController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // Return 404 if role not found
         }
     }
+
 }

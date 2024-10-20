@@ -1,22 +1,28 @@
 package com.keycodehelp.controller;
 
+import com.keycodehelp.dto.AuthenticationResponse;
 import com.keycodehelp.entities.User;
 import com.keycodehelp.services.UserService;
 import lombok.Getter;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    @Getter
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
@@ -24,42 +30,6 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    // Display login page
-    @GetMapping("/login")
-    public String showLoginPage() {
-        return "login";  // Render the login.html Thymeleaf template
-    }
-
-    // Handle login submission
-    @PostMapping("/login")
-    public String login(@RequestParam("username") String username,
-                        @RequestParam("password") String password,
-                        Model model) {
-        try {
-            // Authenticate the user
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            // Redirect to dashboard based on user role
-            if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-                return "redirect:/admin";  // Admin dashboard
-            } else {
-                return "redirect:/user-dashboard";  // User dashboard
-            }
-        } catch (Exception e) {
-            model.addAttribute("error", "Invalid username or password");
-            return "login";  // Send back to login page in case of error
-        }
-    }
-
-    // Display registration page
-    @GetMapping("/auth/register" + "/register")
-    public String showRegistrationPage() {
-        return "register";  // Render the register.html Thymeleaf template
     }
 
     // Handle user registration
@@ -87,7 +57,7 @@ public class AuthController {
         } catch (Exception e) {
             e.printStackTrace();  // Log the error for debugging purposes
             model.addAttribute("error", "There was an error during registration.");
-            return "register";  // Send back to the register page in case of error
+            return "register";  // Send back to the register page in case of error (no leading slash)
         }
     }
 
@@ -98,6 +68,7 @@ public class AuthController {
         return "admin";  // Render the admin.html Thymeleaf template
     }
 
+    // Admin tasks page
     @GetMapping("/admin/tasks")
     public String adminTasks(Model model) {
         model.addAttribute("pageTitle", "Admin Tasks");

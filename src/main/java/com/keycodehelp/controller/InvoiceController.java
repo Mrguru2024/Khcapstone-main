@@ -24,14 +24,14 @@ public class InvoiceController {
     }
 
     // Endpoint to create a new invoice
-    @PostMapping
+    @PostMapping("/invoices")
     public ResponseEntity<Invoice> createInvoice(@RequestBody Invoice invoice) {
         Invoice savedInvoice = invoiceService.saveInvoice(invoice);
         return ResponseEntity.ok(savedInvoice);
     }
 
     // Endpoint to retrieve a specific invoice by ID
-    @GetMapping("/{id}")
+    @GetMapping("/invoices/{id}")
     public ResponseEntity<Invoice> getInvoiceById(@PathVariable Long id) {
         Optional<Invoice> invoice = invoiceService.getInvoiceById(id);
         return invoice.map(ResponseEntity::ok)
@@ -39,7 +39,7 @@ public class InvoiceController {
     }
 
     // Endpoint to retrieve all invoices
-    @GetMapping
+    @GetMapping("/invoices")
     public ResponseEntity<List<Invoice>> getAllInvoices() {
         List<Invoice> invoices = invoiceService.getAllInvoices();
         if (invoices.isEmpty()) {
@@ -49,14 +49,14 @@ public class InvoiceController {
     }
 
     // Endpoint to update an existing invoice
-    @PutMapping("/{id}")
+    @PutMapping("/invoices/{id}")
     public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @RequestBody Invoice invoiceDetails) {
         Invoice updatedInvoice = invoiceService.updateInvoice(id, invoiceDetails);
         return ResponseEntity.ok(updatedInvoice);
     }
 
     // Endpoint to delete an invoice by ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/invoices/{id}")
     public ResponseEntity<Void> deleteInvoice(@PathVariable Long id) {
         invoiceService.deleteInvoice(id);
         return ResponseEntity.noContent().build();

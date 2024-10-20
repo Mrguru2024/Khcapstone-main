@@ -16,7 +16,6 @@ public class KeycodeService {
     private final KeycodeRepository keycodeRepository;
     private final KeycodeRequestRepository keycodeRequestRepository;
 
-    // Constructor-based injection
     public KeycodeService(KeycodeRepository keycodeRepository, KeycodeRequestRepository keycodeRequestRepository) {
         this.keycodeRepository = keycodeRepository;
         this.keycodeRequestRepository = keycodeRequestRepository;
@@ -24,37 +23,39 @@ public class KeycodeService {
 
     // Convert VIN to Keycode and log the request
     public Keycode convertVinToKeycode(String vin, User user) {
-        // Generate the keycode
-        String generatedKeycode = "KEY-" + vin.toUpperCase();
+        Optional<Keycode> existingKeycode = keycodeRepository.findByVin(vin);
 
-        // Create a new Keycode entity
-        Keycode keycode = new Keycode(vin, generatedKeycode, user); // Use the constructor with three parameters
+        if (existingKeycode.isPresent()) {
+            // Return existing keycode if already generated
+            return existingKeycode.get();
+        }
+
+        // Otherwise, generate a new keycode
+        String generatedKeycode = "KEY-" + vin.toUpperCase();
+        Keycode keycode = new Keycode(vin, generatedKeycode, user);
         keycodeRepository.save(keycode);
 
-        // Log the request in KeycodeRequest
-        KeycodeRequest request = new KeycodeRequest(vin, user);  // LocalDateTime is set automatically
+        // Log the keycode request
+        KeycodeRequest request = new KeycodeRequest(vin, user);
         keycodeRequestRepository.save(request);
 
         return keycode;
     }
 
-    // Get keycode request history for the user
+    // Fetch request history for a specific user
     public List<KeycodeRequest> getKeycodeHistory(User user) {
         return keycodeRequestRepository.findByUserId(user.getId());
     }
 
-    // Save a Keycode entity
-    public Keycode saveKeycode(Keycode keycode) {
-        return keycodeRepository.save(keycode);
-    }
-
-    // Retrieve all Keycode entities
     public List<Keycode> getAllKeycodes() {
         return keycodeRepository.findAll();
     }
 
-    // Retrieve a Keycode entity by its ID
     public Optional<Keycode> getKeycodeById(Long id) {
         return keycodeRepository.findById(id);
+    }
+
+    public Keycode saveKeycode(Keycode keycode) {
+        return keycode;
     }
 }

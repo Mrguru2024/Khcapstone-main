@@ -1,5 +1,7 @@
 package com.keycodehelp.dto;
 
-public record AuthenticationResponse(String jwt) {
+import java.util.List;
+
+public record AuthenticationResponse(String username, List<String> roles) {
 
 }

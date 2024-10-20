@@ -1,15 +1,19 @@
 package com.keycodehelp.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Setter
-@Getter
 @Entity
-@Table(name = "keycode_requests") // Ensure this matches your actual table name in the database
+@Table(name = "keycode_requests")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class KeycodeRequest {
 
     @Id
@@ -22,24 +26,18 @@ public class KeycodeRequest {
     @Column(nullable = false)
     private LocalDateTime requestTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Constructor with LocalDateTime
-    public KeycodeRequest(String vin, LocalDateTime requestTime, User user) {
-        this.vin = vin;
-        this.requestTime = requestTime;
-        this.user = user;
-    }
-
-    // New constructor with User and auto-set current time
     public KeycodeRequest(String vin, User user) {
-        this.vin = vin;
-        this.requestTime = LocalDateTime.now(); // Initialize to the current time
-        this.user = user;
     }
 
-    // Default constructor
-    public KeycodeRequest() {}
+    public KeycodeRequest(String vin123, LocalDateTime now, User user) {
+    }
+
+    @PrePersist
+    protected void onRequest() {
+        this.requestTime = LocalDateTime.now();
+    }
 }

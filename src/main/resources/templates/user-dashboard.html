@@ -1,14 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title th:text="${pageTitle}">User Dashboard</title>
-  <link rel="stylesheet" th:href="@{/static/style.css}">
+  <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body>
-<h1 th:text="${pageTitle}">User Dashboard</h1>
-<div>
-  <!-- User dashboard content goes here -->
-  <p>Welcome, user! Here are your details:</p>
+<!-- Header -->
+<header>
+  <h1>User Dashboard</h1>
+</header>
+
+<!-- Navigation Bar -->
+<nav>
+  <ul>
+    <li><a th:href="@{/home}">Home</a></li>
+    <li><a th:href="@{/keycode}">Keycode</a></li>
+    <li><a th:href="@{/vin-lookup}">VIN Lookup</a></li>
+    <li><a th:href="@{/about}">About</a></li>
+    <li><a th:href="@{/contact}">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Main Container for User Dashboard Content -->
+<div class="container">
+  <!-- Previous Orders Section -->
+  <section>
+    <h2>Previous Orders</h2>
+    <ul>
+      <li>Order #12345 - Completed</li>
+      <li>Order #67890 - Completed</li>
+    </ul>
+  </section>
+
+  <!-- Pending Orders Section -->
+  <section>
+    <h2>Pending Orders</h2>
+    <ul>
+      <li>Order #54321 - Processing</li>
+      <li>Order #98765 - Awaiting Confirmation</li>
+    </ul>
+  </section>
+
+  <!-- Start New Order Section -->
+  <section>
+    <h2>Start a New Order</h2>
+    <a class="button" th:href="@{/keycode}">Start New Order</a>
+  </section>
 </div>
+
 </body>
 </html>

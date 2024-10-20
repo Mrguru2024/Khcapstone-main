@@ -1,15 +1,19 @@
 package com.keycodehelp.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Setter
-@Getter
 @Entity
 @Table(name = "keycodes")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Keycode {
 
     @Id
@@ -29,28 +33,14 @@ public class Keycode {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Default constructor
-    public Keycode() {
+    public Keycode(String vin, String generatedKeycode, User user) {
     }
 
-    // Constructor for creating a Keycode with a generated keycode
-    public Keycode(String vin, String keycode, User user) {
-        this.vin = vin;
-        this.keycode = keycode;
-        this.user = user;
+    public Keycode(String vin, String generatedKeycode, LocalDateTime now, User user) {
     }
 
-    // Constructor for creating a Keycode with a specified createdAt time
-    public Keycode(String vin, String keycode, LocalDateTime createdAt, User user) {
-        this.vin = vin;
-        this.keycode = keycode;
-        this.createdAt = createdAt;  // Use provided createdAt time
-        this.user = user;
-    }
-
-    // Automatically set createdAt before persisting
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now(); // Set createdAt to the current time
+        this.createdAt = LocalDateTime.now();
     }
 }

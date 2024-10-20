@@ -28,13 +28,13 @@ public class SignupController {
     }
 
     // Serve the signup page with a GET request
-    @GetMapping
+    @GetMapping("/signup")
     public String showSignupPage(Model model) {
         model.addAttribute("signupRequest", new SignupRequest());
         return "register";  // Matches register.html in templates folder
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public String registerUser(@Valid @ModelAttribute SignupRequest signupRequest, Model model, HttpServletRequest request) {
         // Check if the username or email already exists
         if (userService.existsByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail())) {
@@ -52,7 +52,7 @@ public class SignupController {
         Optional<Role> userRole = userService.findRoleByName("ROLE_USER");
         if (userRole.isEmpty()) {
             model.addAttribute("error", "User role not found.");
-            return "register"; // Send back to register page if role not found
+            return "register"; // Send back to register page if a role not found
         }
 
         // Add the role to the user
