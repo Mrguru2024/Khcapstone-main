@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIN Keycode</title>
+  <link rel="stylesheet" th:href="@{/css/tailwind.css}">
+</head>
+<body class="bg-gray-100 text-gray-900">
+<header class="bg-gray-800 text-white p-4">
+  <h1 class="text-center text-3xl font-bold">Keycode Generation</h1>
+</header>
+
+<main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-2xl">
+  <h2 class="text-xl font-bold mb-4">Your Keycode</h2>
+
+  <p class="text-lg">
+    VIN: <span th:text="${vin}"></span>
+  </p>
+  <p class="text-lg">
+    Generated Keycode: <span th:text="${keycode}"></span>
+  </p>
+
+  <div class="mt-6">
+    <a href="/keycode" class="block w-full text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+      Generate Another Keycode
+    </a>
+  </div>
+</main>
+</body>
+</html>

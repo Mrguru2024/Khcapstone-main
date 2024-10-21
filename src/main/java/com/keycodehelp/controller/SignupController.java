@@ -1,6 +1,7 @@
 package com.keycodehelp.controller;
 
 import com.keycodehelp.dto.SignupRequest;
+import com.keycodehelp.entities.Role;
 import com.keycodehelp.entities.User;
 import com.keycodehelp.exception.UserAlreadyExistsException;
 import com.keycodehelp.services.UserService;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/register")
@@ -35,7 +37,6 @@ public class SignupController {
 
     @PostMapping
     public String registerUser(@Valid @ModelAttribute SignupRequest signupRequest, Model model, HttpServletRequest request) {
-<<<<<<< HEAD
         // Check if the username or email already exists
         if (userService.existsByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail())) {
             model.addAttribute("error", "Username or email already exists.");
@@ -59,11 +60,9 @@ public class SignupController {
         user.getRoles().add(userRole.get());
 
         // Save the user (with encoded password in UserService)
-=======
->>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
         try {
             // Register the new user using UserService
-            User user = userService.registerNewUser(signupRequest.getUsername(), signupRequest.getEmail(), signupRequest.getPassword());
+            user = userService.registerNewUser(signupRequest.getUsername(), signupRequest.getEmail(), signupRequest.getPassword());
 
             // Automatically log in the user after registration
             UsernamePasswordAuthenticationToken authenticationToken =

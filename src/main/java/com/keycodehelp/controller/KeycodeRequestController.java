@@ -1,58 +1,49 @@
 package com.keycodehelp.controller;
 
+import com.keycodehelp.entities.Keycode;
 import com.keycodehelp.entities.KeycodeRequest;
-import com.keycodehelp.services.KeycodeRequestService;
-import org.springframework.http.ResponseEntity;
+import com.keycodehelp.entities.User;
+import com.keycodehelp.services.KeycodeService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;  // Ensure you're importing this for validation
-
-import java.net.URI;
-import java.util.List;
 
 @Controller
-@RequestMapping("/keycode-requests")
-@CrossOrigin(origins = "http://localhost:3000")  // Adjust frontend URL if needed
+//@RequestMapping("/keycode") // does not interact with Thymeleaf
 public class KeycodeRequestController {
 
-    private final KeycodeRequestService keycodeRequestService;
+    private final KeycodeService keycodeService;
 
-    public KeycodeRequestController(KeycodeRequestService keycodeRequestService) {
-        this.keycodeRequestService = keycodeRequestService;
+    public KeycodeRequestController(KeycodeService keycodeService) {
+        this.keycodeService = keycodeService;
     }
 
-    // Retrieve all Keycode Requests
-    @GetMapping
-    public List<KeycodeRequest> getAllKeycodeRequests() {
-        return keycodeRequestService.getAllKeycodeRequests();
+    // Display the keycode request form
+    @GetMapping("/keycode_request")
+    public String showKeycodeRequestForm() {
+        return "keycode_request";  // Renders the form for VIN submission
     }
 
-    // Retrieve Keycode Request by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<KeycodeRequest> getKeycodeRequestById(@PathVariable Long id) {
-        KeycodeRequest keycodeRequest = keycodeRequestService.getKeycodeRequestById(id);
-        return ResponseEntity.ok(keycodeRequest);
-    }
+    // Handle keycode request submission
+    @PostMapping("/keycode_request")
+    public String submitKeycodeRequest(@RequestParam("vin") String vin, Model model) {
+        try {
+            // Get the current authenticated user
+            User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    // Create a new Keycode Request
-    @PostMapping
-    public ResponseEntity<KeycodeRequest> createKeycodeRequest(@Valid @RequestBody KeycodeRequest keycodeRequest) {
-        KeycodeRequest newKeycodeRequest = keycodeRequestService.createKeycodeRequest(keycodeRequest);
-        URI location = URI.create("/api/keycode-requests/" + newKeycodeRequest.getId());  // Use the ID of the created resource
-        return ResponseEntity.created(location).body(newKeycodeRequest);  // Return 201 Created with the location
-    }
+            // Create the keycode request and generate the keycode
+            KeycodeRequest keycodeRequest = keycodeService.createKeycodeRequest(vin, currentUser);
+            Keycode keycode = keycodeService.convertVinToKeycode(vin, currentUser);
 
-    // Update an existing Keycode Request
-    @PutMapping("/{id}")
-    public ResponseEntity<KeycodeRequest> updateKeycodeRequest(@PathVariable Long id, @Valid @RequestBody KeycodeRequest keycodeRequestDetails) {
-        KeycodeRequest updatedKeycodeRequest = keycodeRequestService.updateKeycodeRequest(id, keycodeRequestDetails);
-        return ResponseEntity.ok(updatedKeycodeRequest);
-    }
+            // Add keycode information to the model to display on the result page
+            model.addAttribute("vin", keycode.getVin());
+            model.addAttribute("keycode", keycode.getKeycode());
 
-    // Delete a Keycode Request by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteKeycodeRequest(@PathVariable Long id) {
-        keycodeRequestService.deleteKeycodeRequest(id);
-        return ResponseEntity.noContent().build();
+            return "redirect:/user-dashboard";
+        } catch (Exception e) {
+            model.addAttribute("error", "Failed to generate keycode. Please try again.");
+            return "error";  // Return to form on error
+        }
     }
 }

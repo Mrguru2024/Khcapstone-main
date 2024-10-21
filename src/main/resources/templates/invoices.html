@@ -7,46 +7,63 @@
     <link rel="stylesheet" th:href="@{/css/tailwind.css}">
 </head>
 <body class="bg-gray-100 text-gray-900">
+<!-- Include Navbar Fragment -->
+<div th:replace="fragments/navbar :: navbar"></div>
 <header class="bg-gray-800 text-white p-4">
     <h1 class="text-center text-3xl font-bold">Invoice History</h1>
-    <li><a th:href="@{/logout}" class="hover:text-gray-300">Logout</a></li> <!-- Logout link -->
 </header>
 <main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-3xl">
     <section>
         <h2 class="text-2xl font-semibold mb-4">Your Invoices</h2>
+
         <table class="min-w-full table-auto bg-white border-collapse">
             <thead>
-            <tr class="bg-gray-800 text-white">
+            <tr class="bg-gray-800 text-white text-left"> <!-- Align header text to the left -->
                 <th class="py-2 px-4">Invoice #</th>
                 <th class="py-2 px-4">Date</th>
+                <th class="py-2 px-4">Description</th>
                 <th class="py-2 px-4">Amount</th>
                 <th class="py-2 px-4">Status</th>
-                <th class="py-2 px-4">Download</th>
+                <th class="py-2 px-4 text-center">Actions</th> <!-- Center text for action buttons -->
             </tr>
             </thead>
             <tbody>
-            <tr class="border-t">
-                <td class="py-2 px-4">INV-00123</td>
-                <td class="py-2 px-4">2023-01-15</td>
-                <td class="py-2 px-4">$120.00</td>
-                <td class="py-2 px-4 text-green-600">Paid</td>
-                <td class="py-2 px-4">
-                    <a href="/invoices/INV-00123.pdf" class="text-blue-600 hover:underline">Download</a>
+            <tr th:each="invoice : ${invoices}" class="bg-gray-100 hover:bg-gray-200"> <!-- Add hover effect on rows -->
+                <td class="py-2 px-4 align-middle" th:text="${invoice.id}">INV-00123</td>
+                <td class="py-2 px-4 align-middle" th:text="${invoice.paymentDate}"></td>
+                <td class="py-2 px-4 align-middle" th:text="${invoice.description}">Description</td>
+                <td class="py-2 px-4 align-middle text-right" th:text="${invoice.amount}">$120.00</td> <!-- Right align for amount -->
+                <td class="py-2 px-4 align-middle" th:text="${invoice.status}">Paid</td>
+                <td class="py-2 px-4 align-middle text-center"> <!-- Center align for actions -->
+                    <a th:href="@{/invoices/edit/{id}(id=${invoice.id})}" class="text-blue-600 hover:underline mx-2">Edit</a>
+                    <a th:href="@{/invoices/delete/{id}(id=${invoice.id})}" class="text-red-600 hover:underline mx-2">Delete</a>
                 </td>
             </tr>
-            <tr class="border-t">
-                <td class="py-2 px-4">INV-00124</td>
-                <td class="py-2 px-4">2023-02-01</td>
-                <td class="py-2 px-4">$90.00</td>
-                <td class="py-2 px-4 text-yellow-600">Pending</td>
-                <td class="py-2 px-4">
-                    <a href="/invoices/INV-00124.pdf" class="text-blue-600 hover:underline">Download</a>
-                </td>
-            </tr>
-            <!-- Add more rows as necessary -->
             </tbody>
         </table>
     </section>
+
+    <!-- Add new Invoice Form -->
+    <section>
+        <h2 class="text-2xl font-semibold mb-4 mt-8">Add New Invoice</h2>
+        <form th:action="@{/invoices}" th:object="${newInvoice}" method="post">
+            <div>
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" th:field="*{amount}" required />
+            </div>
+            <div>
+                <label for="status">Status:</label>
+                <input type="text" id="status" name="status" th:field="*{status}" required />
+            </div>
+            <div>
+                <label for="description">Description:</label>
+                <input type="text" id="description" name="description" th:field="*{description}" required />
+            </div>
+            <button type="submit" class="mt-4 bg-blue-500 text-white p-2 rounded">Add Invoice</button>
+        </form>
+    </section>
 </main>
+<!-- Include Footer Fragment -->
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

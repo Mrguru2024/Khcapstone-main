@@ -3,24 +3,15 @@ package com.keycodehelp.controller;
 import com.keycodehelp.entities.User;
 import com.keycodehelp.exception.UserAlreadyExistsException;
 import com.keycodehelp.services.UserService;
-<<<<<<< HEAD
+
 import lombok.Getter;
-=======
->>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.*;
-=======
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
->>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
 
 @Controller
 public class AuthController {
@@ -29,105 +20,123 @@ public class AuthController {
     @Getter
     private final UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager, UserService userService, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthenticationManager authenticationManager, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
     }
-<<<<<<< HEAD
 
-    // Display login page
+    // Display login page for users (ROLE_USER)
     @GetMapping("/login")
-    public String showLoginPage() {
-        return "login";  // Render the login.html Thymeleaf template
+    public String showUserLoginPage(@RequestParam(value = "error", required = false) String error,
+                                    @RequestParam(value = "sessionExpired", required = false) String sessionExpired,
+                                    Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Invalid username or password");
+        }
+        if (sessionExpired != null) {
+            model.addAttribute("sessionExpired", "Your session has expired. Please log in again.");
+        }
+        return "login";  // Renders the login.html page for regular users
     }
 
-    // Handle login submission
+    // Display login page for admins (ROLE_ADMIN)
+    @GetMapping("/admin/login")
+    public String showAdminLoginPage(@RequestParam(value = "error", required = false) String error,
+                                     Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Invalid username or password");
+        }
+        return "authlogin";  // Renders the authlogin.html page for admins
+    }
+
+    // Handle login submission for users and admins
     @PostMapping("/login")
-    public String login(@RequestParam("username") String username,
-                        @RequestParam("password") String password,
-                        Model model) {
+    public String loginUser(@RequestParam("username") String username,
+                            @RequestParam("password") String password,
+                            Model model) {
         try {
-            // Authenticate the user
+            // Authenticate the user or admin
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Redirect to dashboard based on user role
+            // Redirect based on user role
             if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-                return "redirect:/admin";  // Admin dashboard
+                return "redirect:/admin";  // Redirect to admin dashboard
             } else {
-                return "redirect:/user-dashboard";  // User dashboard
+                return "redirect:/user-dashboard";  // Redirect to user dashboard
             }
         } catch (Exception e) {
+            // Display error message for login failure
             model.addAttribute("error", "Invalid username or password");
-            return "login";  // Send back to login page in case of error
+            return username.equalsIgnoreCase("admin") ? "authlogin" : "login";  // Return respective login page with error
         }
     }
 
     // Display registration page
-    @GetMapping("/auth/register" + "/register")
+    @GetMapping("/auth/register")
     public String showRegistrationPage() {
-        return "register";  // Render the register.html Thymeleaf template
+        return "register";  // Renders the register.html page for new users
     }
 
-=======
->>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
     // Handle user registration
     @PostMapping("/auth/register")
     public String handleRegistration(@ModelAttribute User user, Model model) {
         try {
-            // Store the raw password before encoding
-            String rawPassword = user.getPassword();
+            // Save the registered user with "ROLE_USER" using UserService
+            userService.saveUser(user, "ROLE_USER");
 
-            // Save the registered user to the database using UserService
-            userService.saveUser(user, "ROLE_USER");  // Assign ROLE_USER to the new user
-
-            // Authenticate the user with the raw password
+            // Automatically authenticate the user upon registration
             UsernamePasswordAuthenticationToken authToken =
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), rawPassword);
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
             // Authenticate the user
             Authentication authentication = authenticationManager.authenticate(authToken);
-
-            // Set the authentication in the security context
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Redirect the user to the dashboard after registration and login
+            // Redirect to user dashboard after registration and login
             return "redirect:/user-dashboard";
         } catch (UserAlreadyExistsException e) {
             // Handle duplicate user case
             model.addAttribute("error", e.getMessage());
-            return "register";  // Send back to the register page with an error message
+            return "register";  // Return register page with an error message
         } catch (Exception e) {
-            e.printStackTrace();  // Log the error for debugging purposes
             model.addAttribute("error", "There was an error during registration.");
-            return "register";  // Send back to the register page in case of error
+            return "register";  // Return register page with error
         }
     }
-<<<<<<< HEAD
 
     // Admin dashboard
     @GetMapping("/admin")
     public String adminDashboard(Model model) {
         model.addAttribute("pageTitle", "Admin Dashboard");
-        return "admin";  // Render the admin.html Thymeleaf template
+        return "admin";  // Renders the admin.html page
     }
 
+    // Admin tasks page
     @GetMapping("/admin/tasks")
     public String adminTasks(Model model) {
         model.addAttribute("pageTitle", "Admin Tasks");
-        return "admin_tasks";  // Render the admin_tasks.html Thymeleaf template
+        return "admin_tasks";  // Renders the admin_tasks.html page
+    }
+    // Handle user update
+    @PostMapping("/edit-user/{id}")
+    public <AppUser> String updateUser(@PathVariable Long id, @ModelAttribute("appUser") AppUser updatedUser, Model model) {
+        model.addAttribute("pageTitle", "Update User");
+        return "redirect:/admin";
     }
 
+    // Handle user deletion
+    @GetMapping("/edit-user{id}")
+    public String deleteUser(@PathVariable Long id, Model model) {
+       model.addAttribute("pageTitle", "Delete User");
+        return "redirect:/admin/adminDashboard";
+    }
     // User dashboard
-=======
->>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
     @GetMapping("/user-dashboard")
     public String userDashboard(Model model) {
-        // Add any required attributes to the model if needed
         model.addAttribute("pageTitle", "User Dashboard");
-        return "user-dashboard";  // Render user-dashboard.html Thymeleaf template
+        return "user-dashboard";  // Renders the user-dashboard.html page
     }
-
 }

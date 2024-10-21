@@ -1,3 +1,108 @@
+//package com.keycodehelp.config;
+//
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.authentication.AuthenticationManager;
+//import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.core.userdetails.UserDetailsService;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.web.SecurityFilterChain;
+//import org.springframework.security.config.http.SessionCreationPolicy;
+//import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+//import org.springframework.security.core.session.SessionRegistry;
+//import org.springframework.security.core.session.SessionRegistryImpl;
+//import org.springframework.security.web.session.HttpSessionEventPublisher;
+//
+//@Configuration
+//@EnableWebSecurity
+//public class SecurityConfig {
+//
+//    private final UserDetailsService userDetailsService;
+//
+//    public SecurityConfig(UserDetailsService userDetailsService) {
+//        this.userDetailsService = userDetailsService;
+//    }
+//
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                // Enable CSRF protection using cookies
+//                .csrf(csrf -> csrf
+//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                )
+//
+//                // Configure session management
+//                .sessionManagement(sessionManagement -> sessionManagement
+//                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+//                        .maximumSessions(100)
+//                        .sessionRegistry(sessionRegistry())
+//                )
+//
+//                // Define URL access rules
+//                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+//                        .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/login", "/signup", "/register", "/error", "/auth/**", "/home", "/footer", "/header", "/navbar", "/keycode", "/vin-lookup", "/about", "/contact","/invoices").permitAll()
+//                        .requestMatchers("/user-dashboard", "/keycode/convert", "/keycode/keycode/show").hasRole("USER")
+//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+//                        .anyRequest().authenticated()
+//                )
+//
+//                // Configure form login
+//                .formLogin(formLogin -> formLogin
+//                        .loginPage("/login")  // Custom login page for both users and admins
+//                        .permitAll()
+//                        .defaultSuccessUrl("/user-dashboard", true)  // Redirect to user dashboard by default
+//                        .failureUrl("/login?error")  // Redirect on login failure
+//                        .successHandler((request, response, authentication) -> {
+//                            // Redirect based on role
+//                            if (authentication.getAuthorities().stream()
+//                                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
+//                                response.sendRedirect("/admin");
+//                            } else {
+//                                response.sendRedirect("/user-dashboard");
+//                            }
+//                        })
+//                )
+//
+//                // Configure logout
+//                .logout(logout -> logout
+//                        .logoutUrl("/logout")
+//                        .logoutSuccessUrl("/login?logout")
+//                        .permitAll()
+//                );
+//
+//        // Set custom UserDetailsService for authentication
+//        http.userDetailsService(userDetailsService);
+//
+//        return http.build();
+//    }
+//
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
+//
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+//
+//    @Bean
+//    public SessionRegistry sessionRegistry() {
+//        return new SessionRegistryImpl();
+//    }
+//
+//    @Bean
+//    public HttpSessionEventPublisher httpSessionEventPublisher() {
+//        return new HttpSessionEventPublisher();
+//    }
+//}
+
+
+
+
 package com.keycodehelp.config;
 
 import org.springframework.context.annotation.Bean;
@@ -11,6 +116,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 @EnableWebSecurity
@@ -25,90 +134,66 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-<<<<<<< HEAD
-                // Enable CSRF protection (default)
-                // Session management
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                )
-
-                // Configure public access for static resources and login/signup pages
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                // Allow access to static resources (CSS, JS, images)
-                                .requestMatchers("/static/**", "/static", "/css/**", "/js/**", "/images/**", "user-dashboard.html", "/home.html").permitAll()
-
-                                // Public access for login, signup, and error pages
-                                .requestMatchers("/login", "/signup", "/register.html", "/error", "/auth/**").permitAll()
-
-                                // Admin-specific access control
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                                // Any other requests require authentication
-                                .anyRequest().authenticated()
-=======
-                // Enable CSRF protection using cookies
+                // CSRF protection using cookies
                 .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Use cookie-based CSRF tokens
-                )
-                // Configure session management
-                .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Create session if necessary
-                        .invalidSessionUrl("/login?sessionExpired=true")  // Redirect to log in on session expiration
-                        .maximumSessions(100)  // Limit to one session per user
-                        .sessionRegistry(sessionRegistry())  // Use SessionRegistry for tracking
-                )
-                // Define URL access rules
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                // Permit all for static resources and certain URLs
-                                .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/login", "/signup", "/register", "/error", "/auth/**", "/home", "/footer", "/header", "/navbar", "/keycode", "/vin-lookup", "/about", "/contact").permitAll()                                .requestMatchers("/footer", "/header", "navbar").permitAll()
-                                // Restrict access to the user dashboard and admin pages
-                                .requestMatchers("/user-dashboard").hasRole("USER")
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                // Require authentication for any other requests
-                                .anyRequest().anonymous()
->>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
 
-                // Configure form login
+                // Session management
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .maximumSessions(100)
+                        .sessionRegistry(sessionRegistry())
+                )
+
+                // Define URL access rules
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/login", "/signup", "/register", "/error", "/auth/**", "/home", "/footer", "/header", "/navbar", "/keycode", "/vin-lookup", "/about", "/contact", "/invoices").permitAll()
+                        .requestMatchers("/user-dashboard", "/keycode/convert", "/keycode/keycode/show").hasRole("USER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+
+                // Form login configuration
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .defaultSuccessUrl("/user-dashboard", true)
                         .permitAll()
+                        .defaultSuccessUrl("/user-dashboard", true)
                         .failureUrl("/login?error")
+                        .successHandler((request, response, authentication) -> {
+                            String redirectUrl = authentication.getAuthorities().stream()
+                                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN")) ? "/admin" : "/user-dashboard";
+                            response.sendRedirect(redirectUrl);
+                        })
                 )
 
-                // Configure logout
+                // Logout configuration
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
+                )
+
+                // Exception handling for access denied pages
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedPage("/access-denied")
                 );
 
-<<<<<<< HEAD
         // Set custom UserDetailsService
-=======
-        // Set custom userDetailsService for authentication
->>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
         http.userDetailsService(userDetailsService);
 
         return http.build();
     }
 
-    // Authentication manager bean
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // Password encoder bean
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-<<<<<<< HEAD
-=======
 
     @Bean
     public SessionRegistry sessionRegistry() {
@@ -119,5 +204,4 @@ public class SecurityConfig {
     public HttpSessionEventPublisher httpSessionEventPublisher() {
         return new HttpSessionEventPublisher();
     }
->>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
 }

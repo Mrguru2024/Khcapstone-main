@@ -1,14 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Footer</title>
+    <title>Navbar</title>
     <link rel="stylesheet" href="/css/tailwind.css">
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
+<!-- Navbar Section -->
+<nav class="bg-gray-900 text-white py-4" th:fragment="navbar">
+    <div class="container mx-auto flex justify-center space-x-6">
+        <!-- Home Link -->
+        <a href="/home" class="hover:text-green-400">Home</a>
 
-<footer class="bg-gray-800 text-white py-6">
+        <!-- Dropdown for Services -->
+        <div class="relative group">
+            <a href="javascript:void(0)" class="hover:text-green-400">Services</a>
+            <!-- Dropdown Menu -->
+            <div class="absolute hidden group-hover:block bg-gray-900 text-gray-900 shadow-lg rounded-lg">
+                <a href="/keycode" class="block px-4 py-2 hover:bg-gray-400">Key Code</a>
+                <a href="/vin-lookup" class="block px-4 py-2 hover:bg-gray-100">VIN Lookup</a>
+                <a href="/programming" class="block px-4 py-2 hover:bg-gray-100">Key Programming</a>
+            </div>
+        </div>
+
+        <!-- Other Links -->
+        <a href="/login" class="hover:text-green-400">Login</a>
+        <a href="/about" class="hover:text-green-400">About</a>
+        <a href="/contact" class="hover:text-green-400">Contact</a>
+    </div>
+</nav>
+
+<!-- Content Section -->
+<main class="flex-grow">
+    <!-- Your main content goes here -->
+</main>
+
+<!-- Footer Section -->
+<footer class="bg-gray-800 text-white py-6 mt-auto">
     <div class="container mx-auto flex justify-between items-center">
         <p class="text-sm">© 2024 KeyCode Help. All rights reserved.</p>
         <ul class="flex space-x-4">

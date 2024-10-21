@@ -5,8 +5,10 @@ import com.keycodehelp.entities.KeycodeRequest;
 import com.keycodehelp.entities.User;
 import com.keycodehelp.services.KeycodeService;
 import com.keycodehelp.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;  // Correct import for Model
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -19,9 +21,28 @@ public class KeycodeController {
     private final KeycodeService keycodeService;
     private final UserService userService;
 
+    @Autowired
     public KeycodeController(KeycodeService keycodeService, UserService userService) {
         this.keycodeService = keycodeService;
         this.userService = userService;
+    }
+
+    // Endpoint to show the keycode by VIN
+    @GetMapping("/keycode/show")
+    public String showKeycode(@RequestParam("vin") String vin, Model model, Principal principal) {
+        // Fetch the keycode by VIN
+        Keycode keycode = keycodeService.getKeycodeByVin(vin);
+
+        // Ensure the keycode exists, otherwise handle the case
+        if (keycode == null) {
+            model.addAttribute("errorMessage", "Keycode not found for VIN: " + vin);
+            return "error"; // Return error page if keycode is not found
+        }
+
+        // Pass the keycode to the view with a distinct name
+        model.addAttribute("generatedKeycode", keycode.getKeycode());
+
+        return "convert"; // Return the page where you display the keycode
     }
 
     // Endpoint to convert VIN to Keycode

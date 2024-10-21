@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Invoice</title>
+  <link rel="stylesheet" th:href="@{/css/tailwind.css}">
+</head>
+<body class="bg-gray-100 text-gray-900">
+<header class="bg-gray-800 text-white p-4">
+  <h1 class="text-center text-3xl font-bold">Edit Invoice</h1>
+</header>
+
+<main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-3xl">
+  <form th:action="@{/invoices/update/{id}(id=${invoice.id})}" th:object="${invoice}" method="post">
+    <div>
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount" th:field="*{amount}" required />
+    </div>
+    <div>
+      <label for="status">Status:</label>
+      <input type="text" id="status" name="status" th:field="*{status}" required />
+    </div>
+    <div>
+      <label for="description">Description:</label>
+      <input type="text" id="description" name="description" th:field="*{description}" required />
+    </div>
+    <button type="submit" class="mt-4 bg-blue-500 text-white p-2 rounded">Update Invoice</button>
+  </form>
+</main>
+</body>
+</html>

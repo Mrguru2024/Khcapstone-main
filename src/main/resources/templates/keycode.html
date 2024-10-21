@@ -4,57 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Key Code Services</title>
-    <link rel="stylesheet" href="../static/styles.css">
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/static/css/tailwind.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
-<body>
-<header>
-    <nav>
-        <ul>
-            <li><a href="/templates/home.html/home.html">Home</a></li>
-            <li class="dropdown">
-                <a href="javascript:void(0)" class="dropdown">Services</a>
-                <div class="dropdown-content">
-                    <a href="/templates/keycode.html">Key Code</a>
-                    <a href="/templates/vin-lookup.htmlookup.html">VIN Lookup</a>
-                    <a href="/templates/programming.htmlmming.html">Key Programming</a>
-                </div>
-            </li>
-            <li><a href="/templates/login.htmllogin.html">Login</a></li>
-            <li><a href="/templates/about.htmlabout.html">About</a></li>
-            <li><a href="/templates/contact.htmlntact.html">Contact</a></li>
-        </ul>
-    <link rel="stylesheet" th:href="@{/css/tailwind.css}">
-</nav>
 <body class="bg-gray-100 text-gray-900">
+<!-- Header and Navigation -->
 <header class="bg-gray-800 text-white p-4">
     <nav class="flex justify-center space-x-6">
         <a href="/home" class="hover:text-gray-300">Home</a>
-        <a href="/keycode" class="hover:text-gray-300">Key Code</a>
-        <a href="/vin-lookup" class="hover:text-gray-300">VIN Lookup</a>
+        <div class="relative group">
+            <a href="javascript:void(0)" class="hover:text-gray-300">Services</a>
+            <div class="absolute hidden group-hover:block bg-white text-gray-900 shadow-lg rounded-lg mt-1">
+                <a href="/keycode" class="block px-4 py-2 hover:bg-gray-100">Key Code</a>
+                <a href="/vin-lookup" class="block px-4 py-2 hover:bg-gray-100">VIN Lookup</a>
+                <a href="/programming" class="block px-4 py-2 hover:bg-gray-100">Key Programming</a>
+            </div>
+        </div>
         <a href="/login" class="hover:text-gray-300">Login</a>
+        <a href="/about" class="hover:text-gray-300">About</a>
+        <a href="/contact" class="hover:text-gray-300">Contact</a>
     </nav>
     <h1 class="text-center text-4xl font-bold py-8">Key Code Services</h1>
 </header>
-<main>
-    <section class="container">
-        <h2>Get Key Codes Instantly</h2>
-        <p>Our key code service provides fast and reliable VIN-to-key code lookups for a wide range of vehicles, ensuring you can cut and program keys quickly.</p>
-        <a href="/templates/login.htmllogin.html" class="button">Start Now</a>
+
+<!-- Main Content -->
 <main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-4xl">
+    <!-- Introduction Section -->
     <section>
         <h2 class="text-2xl font-semibold mb-4">Get Key Codes Instantly</h2>
-        <p class="text-lg text-gray-700">Our key code service provides fast and reliable VIN-to-key code lookups for a wide range of vehicles.</p>
-        <a href="/login" class="block w-full text-center mt-6 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Start Now</a>
+        <p class="text-lg text-gray-700">
+            Our key code service provides fast and reliable VIN-to-key code lookups for a wide range of vehicles, ensuring you can cut and program keys quickly.
+        </p>
+        <a href="/login" class="block w-full text-center mt-6 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+            Start Now
+        </a>
     </section>
+
+    <!-- Keycode Request Form Section -->
     <div class="mt-6">
-        <form action="/keycode/request" method="post" class="space-y-4">
+        <form action="/keycode_request" method="post" class="space-y-4">
             <div>
                 <label for="vin" class="block text-lg font-medium">Enter VIN:</label>
                 <input type="text" id="vin" name="vin" required class="w-full px-4 py-2 border rounded-lg">
             </div>
-            <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">Submit Keycode Request</button>
+            <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+                Submit Keycode Request
+            </button>
         </form>
     </div>
 </main>
+
+<!-- Footer -->
+<footer class="bg-gray-800 text-white p-4 mt-10 text-center">
+    <p>&copy; 2024 KeyCode Help. All rights reserved.</p>
+</footer>
 </body>
 </html>

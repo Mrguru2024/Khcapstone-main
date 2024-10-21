@@ -3,15 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Header</title>
     <link rel="stylesheet" href="/css/tailwind.css">
+    <title>Header</title>
 </head>
 <body>
-
-<header class="bg-gray-800 text-white p-4 shadow-lg">
-    <h1 class="text-4xl font-bold text-center">KeyCode Help</h1>
-    <p class="text-center text-gray-300 mt-2">Providing futuristic keycode solutions</p>
+<header class="bg-gray-800 text-white p-4" th:fragment="header">
+    <nav>
+        <ul class="flex justify-center space-x-6">
+            <li><a href="/home" class="hover:text-gray-300">Home</a></li>
+            <li class="relative group">
+                <a href="javascript:void(0)" class="hover:text-gray-300">Services</a>
+                <div class="absolute hidden group-hover:block bg-white text-gray-900 shadow-lg rounded-lg">
+                    <a href="/keycode" class="block px-4 py-2 hover:bg-gray-100">Key Code</a>
+                    <a href="/vin-lookup" class="block px-4 py-2 hover:bg-gray-100">VIN Lookup</a>
+                    <a href="/programming" class="block px-4 py-2 hover:bg-gray-100">Key Programming</a>
+                </div>
+            </li>
+            <li><a href="/login" class="hover:text-gray-300">Login</a></li>
+            <li><a href="/about" class="hover:text-gray-300">About</a></li>
+            <li><a href="/contact" class="hover:text-gray-300">Contact</a></li>
+        </ul>
+    </nav>
 </header>
-
 </body>
 </html>

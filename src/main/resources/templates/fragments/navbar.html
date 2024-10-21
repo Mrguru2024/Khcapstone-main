@@ -1,20 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navbar</title>
+    <title>Navbar with Logo</title>
     <link rel="stylesheet" href="/css/tailwind.css">
 </head>
 <body>
 
-<nav class="bg-gray-900 text-white py-4">
-    <div class="container mx-auto flex justify-center space-x-6">
-        <a href="/home" class="hover:text-green-400">Home</a>
-        <a href="/keycode" class="hover:text-green-400">Keycode</a>
-        <a href="/vin-lookup" class="hover:text-green-400">VIN Lookup</a>
-        <a href="/about" class="hover:text-green-400">About</a>
-        <a href="/contact" class="hover:text-green-400">Contact</a>
+<!-- Sticky Navbar with Logo -->
+<nav class="bg-gray-900 text-white py-4 sticky top-0 z-50" th:fragment="navbar">
+    <div class="container mx-auto flex justify-between items-center">
+        <!-- Logo -->
+        <a href="/home">
+            <img src="/static/images/logo.png" alt="Logo" class="h-10 w-auto">
+        </a>
+
+        <!-- Navbar Links -->
+        <div class="flex space-x-6">
+            <!-- Home Link -->
+            <a href="/home" class="hover:text-green-400">Home</a>
+
+            <!-- Dropdown for Services -->
+            <div class="relative group">
+                <a href="javascript:void(0)" class="hover:text-green-400">Services</a>
+                <!-- Dropdown Menu -->
+                <div class="absolute hidden group-hover:block bg-gray-900 text-gray-900 shadow-lg rounded-lg">
+                    <a href="/keycode" class="block px-4 py-2 hover:bg-gray-400">Key Code</a>
+                    <a href="/vin-lookup" class="block px-4 py-2 hover:bg-gray-100">VIN Lookup</a>
+                    <a href="/programming" class="block px-4 py-2 hover:bg-gray-100">Key Programming</a>
+                </div>
+            </div>
+
+            <!-- Other Links -->
+            <a href="/login" class="hover:text-green-400">Login</a>
+            <a href="/about" class="hover:text-green-400">About</a>
+            <a href="/contact" class="hover:text-green-400">Contact</a>
+        </div>
     </div>
 </nav>
 

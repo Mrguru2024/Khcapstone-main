@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-<<<<<<< HEAD
   <title th:text="${pageTitle}">User Dashboard</title>
   <link rel="stylesheet" th:href="@{/static/style.css}">
 </head>
@@ -9,9 +8,8 @@
 <h1 th:text="${pageTitle}">User Dashboard</h1>
 <div>
   <!-- User dashboard content goes here -->
-  <p>Welcome, user! Here are your details:</p>
 </div>
-=======
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Dashboard</title>
@@ -21,7 +19,6 @@
 <header class="bg-gray-800 text-white p-4">
   <h1 class="text-center text-3xl font-bold">User Dashboard</h1>
 </header>
-
 <nav class="bg-gray-700 text-white p-4">
   <ul class="flex justify-center space-x-6">
     <li><a th:href="@{/home}" class="hover:text-gray-300">Home</a></li>
@@ -34,11 +31,11 @@
 
   </ul>
 </nav>
-
+<p>Welcome, user! Here are your details:</p>
 <main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-2xl">
-  <section class="mb-6">
-    <h2 class="text-xl font-bold">Previous Orders</h2>
-    <ul class="list-disc pl-6 mt-2 space-y-2">
+  <section class="m-16">
+    <h2 class="text-xl font-bold m-16">Previous Orders</h2>
+    <ul class="list-disc pl-6 mt-2 space-y-2 m-16">
       <li>Order #12345 - Completed</li>
       <li>Order #67890 - Completed</li>
     </ul>
@@ -59,6 +56,5 @@
     </a>
   </section>
 </main>
->>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
 </body>
 </html>

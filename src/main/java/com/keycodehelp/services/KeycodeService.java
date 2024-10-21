@@ -5,10 +5,11 @@ import com.keycodehelp.entities.KeycodeRequest;
 import com.keycodehelp.entities.User;
 import com.keycodehelp.repositories.KeycodeRepository;
 import com.keycodehelp.repositories.KeycodeRequestRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class KeycodeService {
@@ -16,45 +17,40 @@ public class KeycodeService {
     private final KeycodeRepository keycodeRepository;
     private final KeycodeRequestRepository keycodeRequestRepository;
 
-    // Constructor-based injection
+    @Autowired
     public KeycodeService(KeycodeRepository keycodeRepository, KeycodeRequestRepository keycodeRequestRepository) {
         this.keycodeRepository = keycodeRepository;
         this.keycodeRequestRepository = keycodeRequestRepository;
+
+    }
+    // Fetch the keycode by VIN
+    public Keycode getKeycodeByVin(String vin) {
+        return keycodeRepository.findByVin(vin);
+    }
+    // Create a keycode request
+    public KeycodeRequest createKeycodeRequest(String vin, User user) {
+        KeycodeRequest keycodeRequest = new KeycodeRequest(vin, LocalDateTime.now(), user);
+        return keycodeRequestRepository.save(keycodeRequest);
     }
 
-    // Convert VIN to Keycode and log the request
+    // Generate keycode for a VIN
     public Keycode convertVinToKeycode(String vin, User user) {
-        // Generate the keycode
-        String generatedKeycode = "KEY-" + vin.toUpperCase();
-
-        // Create a new Keycode entity
-        Keycode keycode = new Keycode(vin, generatedKeycode, user); // Use the constructor with three parameters
-        keycodeRepository.save(keycode);
-
-        // Log the request in KeycodeRequest
-        KeycodeRequest request = new KeycodeRequest(vin, user);  // LocalDateTime is set automatically
-        keycodeRequestRepository.save(request);
-
-        return keycode;
-    }
-
-    // Get keycode request history for the user
-    public List<KeycodeRequest> getKeycodeHistory(User user) {
-        return keycodeRequestRepository.findByUserId(user.getId());
-    }
-
-    // Save a Keycode entity
-    public Keycode saveKeycode(Keycode keycode) {
+        Keycode keycode = new Keycode(vin, "GeneratedKeycode_" + vin, user); // Simplified keycode generation
         return keycodeRepository.save(keycode);
     }
 
-    // Retrieve all Keycode entities
-    public List<Keycode> getAllKeycodes() {
-        return keycodeRepository.findAll();
+    // Retrieve keycode request history for a user
+    public List<KeycodeRequest> getKeycodeHistory(User user) {
+        return keycodeRequestRepository.findAllByUser(user); // Custom query in KeycodeRequestRepository
     }
 
-    // Retrieve a Keycode entity by its ID
-    public Optional<Keycode> getKeycodeById(Long id) {
-        return keycodeRepository.findById(id);
+    // Retrieve all keycode requests (admin feature)
+    public List<KeycodeRequest> getAllKeycodeRequests() {
+        return keycodeRequestRepository.findAll();
+    }
+
+    // Delete a keycode request
+    public void deleteKeycodeRequest(Long id) {
+        keycodeRequestRepository.deleteById(id);
     }
 }
