@@ -4,18 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-<<<<<<< HEAD
     <!-- Corrected the link to reference Thymeleaf for static resources -->
     <link rel="stylesheet" th:href="@{/styles.css}">
-=======
+
     <link rel="stylesheet" th:href="@{/css/tailwind.css}">
->>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
 </head>
 <body class="bg-gray-100 text-gray-900">
 <header class="bg-gray-800 text-white py-4">
     <h1 class="text-center text-3xl font-bold">KeyCode Help</h1>
 </header>
-<<<<<<< HEAD
 <main>
     <section class="container">
         <h2>Login Page</h2>
@@ -29,8 +26,6 @@
             <div th:if="${error}">
                 <p th:text="${error}" style="color: red;"></p>
             </div>
-=======
-
 <main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
     <h2 class="text-2xl font-semibold text-center mb-6">Login Page</h2>
 
@@ -60,12 +55,9 @@
         </div>
 
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
->>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
 
         <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Login</button>
     </form>
-
-<<<<<<< HEAD
             <!-- Use Thymeleaf th:href for the link to Register Page -->
             <a th:href="@{/signup}" style="color: #4CAF50; text-decoration: none; font-size: 16px;">
                 Don't have an account? Register here!
@@ -73,11 +65,10 @@
         </form>
 
     </section>
-=======
+
     <div class="text-center mt-4">
         <a th:href="@{/register}" class="text-blue-600 hover:underline">Don't have an account? Register here!</a>
     </div>
->>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
 </main>
 </body>
 </html>
