@@ -4,38 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" th:href="@{/css/tailwind.css}">
 </head>
-<body>
-<header>
-    <nav>
-        <ul>
-            <li><a href="/templates/home.html/home">Home</a></li>
-            <li class="dropdown">
-                <a href="javascript:void(0)" class="dropdown">Services</a>
-                <div class="dropdown-content">
-                    <a href="/templates/keycode.htmlycode.html">Key Code</a>
-                    <a href="/templates/vin-lookup.htmlookup.html">VIN Lookup</a>
-                    <a href="/templates/programming.htmlmming.html">Key Programming</a>
+<body class="bg-gray-100 text-gray-900">
+<header class="bg-gray-800 text-white">
+    <nav class="flex justify-center py-4">
+        <ul class="flex space-x-8">
+            <li><a href="/templates/home.html/home" class="text-white hover:bg-gray-700 py-2 px-4 rounded">Home</a></li>
+            <li class="relative group">
+                <a href="javascript:void(0)" class="text-white hover:bg-gray-700 py-2 px-4 rounded">Services</a>
+                <div class="absolute hidden group-hover:block bg-white text-gray-900 shadow-lg rounded">
+                    <a href="/templates/keycode.htmlycode.html" class="block px-4 py-2 hover:bg-gray-100">Key Code</a>
+                    <a href="/templates/vin-lookup.htmlookup.html" class="block px-4 py-2 hover:bg-gray-100">VIN Lookup</a>
+                    <a href="/templates/programming.htmlmming.html" class="block px-4 py-2 hover:bg-gray-100">Key Programming</a>
                 </div>
             </li>
-            <li><a href="/templates/login.htmllogin.html">Login</a></li>
-            <li><a href="/templates/about.htmlabout.html">About</a></li>
-            <li><a href="/templates/contact.html">Contact</a></li>
+            <li><a href="/templates/login.htmllogin.html" class="text-white hover:bg-gray-700 py-2 px-4 rounded">Login</a></li>
+            <li><a href="/templates/about.htmlabout.html" class="text-white hover:bg-gray-700 py-2 px-4 rounded">About</a></li>
+            <li><a href="/templates/contact.html" class="text-white hover:bg-gray-700 py-2 px-4 rounded">Contact</a></li>
         </ul>
     </nav>
-    <h1>Contact Us</h1>
+    <h1 class="text-center text-4xl font-bold py-8">Contact Us</h1>
 </header>
-<main>
-    <section class="container">
-        <h2>Get in Touch</h2>
-        <p>If you have any questions, feel free to reach out to us using the following methods:</p>
-        <ul>
-            <li>Email: support@keycodehelp.com</li>
-            <li>Phone: (123) 456-7890</li>
-            <li>Address: 123 Automotive Lane, Car City</li>
-        </ul>
-    </section>
-</main>
-</body>
-</html>
+<main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-4xl">
+    <section>
+        <h2 class="text-2xl font-semibold mb-4">Get in Touch</h2>
+        <p class="text-lg text-gray-700 mb-4">If you have any questions, feel free to reach out to us using the following methods:</p>
+        <ul class="list-disc pl-6 text-lg text-gray-700">
+            <li>Email: <a href="mailto:support@keycodehelp.com" class="text-blue-600 hover:underline">support@keycodehelp.com</a></li>
+            <li>Phone: (123) 456-7890<

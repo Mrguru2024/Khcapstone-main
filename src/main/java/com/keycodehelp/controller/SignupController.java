@@ -1,8 +1,8 @@
 package com.keycodehelp.controller;
 
 import com.keycodehelp.dto.SignupRequest;
-import com.keycodehelp.entities.Role;
 import com.keycodehelp.entities.User;
+import com.keycodehelp.exception.UserAlreadyExistsException;
 import com.keycodehelp.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
-@RequestMapping("/signup")
+@RequestMapping("/register")
 public class SignupController {
 
     private final UserService userService;
@@ -31,11 +30,12 @@ public class SignupController {
     @GetMapping
     public String showSignupPage(Model model) {
         model.addAttribute("signupRequest", new SignupRequest());
-        return "register";  // Matches register.html in templates folder
+        return "/register";  // Matches register.html in templates folder
     }
 
     @PostMapping
     public String registerUser(@Valid @ModelAttribute SignupRequest signupRequest, Model model, HttpServletRequest request) {
+<<<<<<< HEAD
         // Check if the username or email already exists
         if (userService.existsByUsernameOrEmail(signupRequest.getUsername(), signupRequest.getEmail())) {
             model.addAttribute("error", "Username or email already exists.");
@@ -59,23 +59,29 @@ public class SignupController {
         user.getRoles().add(userRole.get());
 
         // Save the user (with encoded password in UserService)
+=======
+>>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
         try {
-            userService.saveUser(user);
+            // Register the new user using UserService
+            User user = userService.registerNewUser(signupRequest.getUsername(), signupRequest.getEmail(), signupRequest.getPassword());
+
+            // Automatically log in the user after registration
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), signupRequest.getPassword());
+
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            // Redirect to the dashboard or a welcome page after successful signup
+            return "redirect:/user-dashboard";  // Redirect to the correct page
+
+        } catch (UserAlreadyExistsException e) {
+            model.addAttribute("error", e.getMessage());  // Display the user-friendly error message
+            return "/register";  // Stay on the registration page with an error message
+
         } catch (Exception e) {
-            model.addAttribute("error", "Error occurred during registration.");
-            return "register";  // Stay on the registration page with an error
+            model.addAttribute("error", "An error occurred during registration. Please try again.");
+            return "/register";  // Stay on the registration page with an error message
         }
-
-        // Automatically log in the user after registration
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(user.getUsername(), signupRequest.getPassword());
-
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-        // Set the authentication in the SecurityContext
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-        // Redirect to the dashboard or a welcome page after successful signup
-        return "redirect:/user-dashboard";  // Correct redirect
     }
 }

@@ -25,6 +25,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+<<<<<<< HEAD
                 // Enable CSRF protection (default)
                 // Session management
                 .sessionManagement(sessionManagement ->
@@ -45,6 +46,29 @@ public class SecurityConfig {
 
                                 // Any other requests require authentication
                                 .anyRequest().authenticated()
+=======
+                // Enable CSRF protection using cookies
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Use cookie-based CSRF tokens
+                )
+                // Configure session management
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Create session if necessary
+                        .invalidSessionUrl("/login?sessionExpired=true")  // Redirect to log in on session expiration
+                        .maximumSessions(100)  // Limit to one session per user
+                        .sessionRegistry(sessionRegistry())  // Use SessionRegistry for tracking
+                )
+                // Define URL access rules
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                // Permit all for static resources and certain URLs
+                                .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/login", "/signup", "/register", "/error", "/auth/**", "/home", "/footer", "/header", "/navbar", "/keycode", "/vin-lookup", "/about", "/contact").permitAll()                                .requestMatchers("/footer", "/header", "navbar").permitAll()
+                                // Restrict access to the user dashboard and admin pages
+                                .requestMatchers("/user-dashboard").hasRole("USER")
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                // Require authentication for any other requests
+                                .anyRequest().anonymous()
+>>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
                 )
 
                 // Configure form login
@@ -58,11 +82,15 @@ public class SecurityConfig {
                 // Configure logout
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 );
 
+<<<<<<< HEAD
         // Set custom UserDetailsService
+=======
+        // Set custom userDetailsService for authentication
+>>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
         http.userDetailsService(userDetailsService);
 
         return http.build();
@@ -79,4 +107,17 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+<<<<<<< HEAD
+=======
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
+>>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
 }

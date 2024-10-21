@@ -4,33 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page with Dropdowns</title>
+<<<<<<< HEAD
     <link rel="stylesheet" href="/styles.css">
+=======
+    <link rel="stylesheet" th:href="@{/css/tailwind.css}">
+>>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
 </head>
-<body>
-<header>
+<body class="bg-gray-100 text-gray-900">
+<header class="bg-gray-800 text-white p-4">
     <nav>
-        <ul>
-            <li><a href="/home">Home</a></li> <!-- Ensure that this matches your routing -->
-            <li class="dropdown">
-                <a href="javascript:void(0)" class="dropdown">Services</a>
-                <div class="dropdown-content">
-                    <a href="/keycode">Key Code</a> <!-- Fixed href link -->
-                    <a href="/vin-lookup">VIN Lookup</a> <!-- Fixed href link -->
-                    <a href="/programming">Key Programming</a> <!-- Fixed href link -->
+        <ul class="flex justify-center space-x-6">
+            <li><a href="/home" class="hover:text-gray-300">Home</a></li>
+            <li class="relative group">
+                <a href="javascript:void(0)" class="hover:text-gray-300">Services</a>
+                <div class="absolute hidden group-hover:block bg-white text-gray-900 shadow-lg rounded-lg">
+                    <a href="/keycode" class="block px-4 py-2 hover:bg-gray-100">Key Code</a>
+                    <a href="/vin-lookup" class="block px-4 py-2 hover:bg-gray-100">VIN Lookup</a>
+                    <a href="/programming" class="block px-4 py-2 hover:bg-gray-100">Key Programming</a>
                 </div>
             </li>
-            <li><a href="/login">Login</a></li> <!-- Fixed href link -->
-            <li><a href="/about">About</a></li> <!-- Fixed href link -->
-            <li><a href="/contact">Contact</a></li> <!-- Fixed href link -->
+            <li><a href="/login" class="hover:text-gray-300">Login</a></li>
+            <li><a href="/about" class="hover:text-gray-300">About</a></li>
+            <li><a href="/contact" class="hover:text-gray-300">Contact</a></li>
         </ul>
     </nav>
-    <h1>KeyCode Help</h1>
+    <h1 class="text-center text-4xl font-bold py-8">KeyCode Help</h1>
 </header>
-<main>
-    <section class="container">
-        <h2>Welcome to the Home Page!</h2>
-        <p>Access automotive keycode services quickly and securely.</p>
-        <a href="/login" class="button">Go to Login</a> <!-- Fixed href link -->
+<main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-4xl">
+    <section>
+        <h2 class="text-2xl font-semibold mb-4">Welcome to the Home Page!</h2>
+        <p class="text-lg text-gray-700">Access automotive keycode services quickly and securely.</p>
+        <a href="/login" class="block w-full text-center mt-6 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Go to Login</a>
     </section>
 </main>
 </body>

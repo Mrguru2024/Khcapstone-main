@@ -1,4 +1,4 @@
-package com.keycodehelp.controller;
+package com.keycodehelp.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Key Code Services</title>
+<<<<<<< HEAD
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
@@ -23,23 +24,44 @@
             <li><a href="/templates/about.htmlabout.html">About</a></li>
             <li><a href="/templates/contact.htmlntact.html">Contact</a></li>
         </ul>
+=======
+    <link rel="stylesheet" th:href="@{/css/tailwind.css}">
+</head>
+<body class="bg-gray-100 text-gray-900">
+<header class="bg-gray-800 text-white p-4">
+    <nav class="flex justify-center space-x-6">
+        <a href="/home" class="hover:text-gray-300">Home</a>
+        <a href="/keycode" class="hover:text-gray-300">Key Code</a>
+        <a href="/vin-lookup" class="hover:text-gray-300">VIN Lookup</a>
+        <a href="/login" class="hover:text-gray-300">Login</a>
+>>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
     </nav>
-    <h1>Key Code Services</h1>
+    <h1 class="text-center text-4xl font-bold py-8">Key Code Services</h1>
 </header>
+<<<<<<< HEAD
 <main>
     <section class="container">
         <h2>Get Key Codes Instantly</h2>
         <p>Our key code service provides fast and reliable VIN-to-key code lookups for a wide range of vehicles, ensuring you can cut and program keys quickly.</p>
         <a href="/templates/login.htmllogin.html" class="button">Start Now</a>
+=======
+<main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-4xl">
+    <section>
+        <h2 class="text-2xl font-semibold mb-4">Get Key Codes Instantly</h2>
+        <p class="text-lg text-gray-700">Our key code service provides fast and reliable VIN-to-key code lookups for a wide range of vehicles.</p>
+        <a href="/login" class="block w-full text-center mt-6 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Start Now</a>
+>>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
     </section>
-</main>
-<div>
-    <form action="/keycode/request" method="post">
-        <label for="vin">Enter VIN:</label><br>
-        <input type="text" id="vin" name="vin" required><br>
-        <button type="submit">Submit Keycode Request</button>
-    </form>
 
-</div>
+    <div class="mt-6">
+        <form action="/keycode/request" method="post" class="space-y-4">
+            <div>
+                <label for="vin" class="block text-lg font-medium">Enter VIN:</label>
+                <input type="text" id="vin" name="vin" required class="w-full px-4 py-2 border rounded-lg">
+            </div>
+            <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">Submit Keycode Request</button>
+        </form>
+    </div>
+</main>
 </body>
 </html>

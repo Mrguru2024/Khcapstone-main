@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+html {
+    font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.05em;
+}
+
+body {
+    background-color: #1b1b2f; /* Dark cyber background */
+    color: #e0f0ea; /* Soft white text */
+}
+
+a {
+    color: #2f89fc; /* Bright blue links */
+}
+
+a:hover {
+    color: #3fffd9; /* Neon green on hover */
+}
+
+button {
+    background-color: #2f89fc; /* Bright blue buttons */
+    color: #e0f0ea;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #3fffd9; /* Neon green on hover */
+}
+
+nav a {
+    color: #e0f0ea; /* Default nav link color */
+}
+
+nav a:hover {
+    color: #3fffd9; /* Neon hover */
+}
+
+/* Responsive container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Futuristic animations */
+@keyframes pulse-glow {
+    0% {
+        box-shadow: 0 0 10px #2f89fc, 0 0 20px #2f89fc, 0 0 30px #2f89fc, 0 0 40px #2f89fc;
+    }
+    50% {
+        box-shadow: 0 0 20px #3fffd9, 0 0 40px #3fffd9, 0 0 60px #3fffd9, 0 0 80px #3fffd9;
+    }
+    100% {
+        box-shadow: 0 0 10px #2f89fc, 0 0 20px #2f89fc, 0 0 30px #2f89fc, 0 0 40px #2f89fc;
+    }
+}
+
+button.futuristic {
+    animation: pulse-glow 1.5s infinite ease-in-out;
+}

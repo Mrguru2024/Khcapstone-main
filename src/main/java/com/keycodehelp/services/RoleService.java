@@ -23,13 +23,13 @@ public class RoleService {
         return roleRepository.save(role);
     }
 
-    // Get role by ID
+    // Get a role by ID
     public Role getRoleById(Long id) {
         return roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found with id: " + id));
     }
 
-    // Get role by name
+    // Get a role by name
     public Role getRoleByName(String roleName) {
         return roleRepository.findByName(roleName)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found with name: " + roleName));

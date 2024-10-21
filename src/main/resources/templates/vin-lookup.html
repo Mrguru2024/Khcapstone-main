@@ -4,33 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIN Lookup</title>
-    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" th:href="@{/css/tailwind.css}">
 </head>
-<body>
-<header>
-    <nav>
-        <ul>
-            <li><a href="/templates/home.html/home.html">Home</a></li>
-            <li class="dropdown">
-                <a href="javascript:void(0)" class="dropdown">Services</a>
-                <div class="dropdown-content">
-                    <a href="/templates/keycode.htmlycode.html">Key Code</a>
-                    <a href="/templates/vin-lookup.html">VIN Lookup</a>
-                    <a href="/templates/programming.htmlmming.html">Key Programming</a>
-                </div>
-            </li>
-            <li><a href="/templates/login.htmllogin.html">Login</a></li>
-            <li><a href="/templates/about.htmlabout.html">About</a></li>
-            <li><a href="/templates/contact.htmlntact.html">Contact</a></li>
-        </ul>
+<body class="bg-gray-100 text-gray-900">
+<header class="bg-gray-800 text-white p-4">
+    <nav class="flex justify-center space-x-6">
+        <a href="/home" class="hover:text-gray-300">Home</a>
+        <a href="/keycode" class="hover:text-gray-300">Key Code</a>
+        <a href="/vin-lookup" class="hover:text-gray-300">VIN Lookup</a>
+        <a href="/login" class="hover:text-gray-300">Login</a>
     </nav>
-    <h1>VIN Lookup Services</h1>
+    <h1 class="text-center text-4xl font-bold py-8">VIN Lookup Services</h1>
 </header>
-<main>
-    <section class="container">
-        <h2>Find Your VIN Information</h2>
-        <p>Use our VIN lookup service to get detailed information about your vehicle and obtain the key codes you need. Fast, secure, and easy.</p>
-        <a href="/templates/login.htmllogin.html" class="button">Lookup VIN</a>
+<main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-2xl">
+    <section>
+        <h2 class="text-2xl font-semibold mb-4">Find Your VIN Information</h2>
+        <p class="text-lg text-gray-700">Use our VIN lookup service to get detailed information about your vehicle and obtain the key codes you need. Fast, secure, and easy.</p>
+        <a href="/login" class="block text-center mt-6 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Lookup VIN</a>
     </section>
 </main>
 </body>

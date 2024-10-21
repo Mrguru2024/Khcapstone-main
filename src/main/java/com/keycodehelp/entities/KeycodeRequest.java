@@ -40,6 +40,16 @@ public class KeycodeRequest {
         this.user = user;
     }
 
+<<<<<<< HEAD
     // Default constructor
     public KeycodeRequest() {}
+=======
+    public KeycodeRequest(String vin123, java.time.LocalDateTime now, User user) {
+    }
+
+    @PrePersist
+    protected void onRequest() {
+        this.requestTime = LocalDateTime.now();
+    }
+>>>>>>> 6077084 (Added tailwind proper config and classes for basic front end use, Added Exception, Dev-prop, Prop-prop, input.css, style.css, added missing controllers, fragments folder, customized header, footer and navbar (ready to use as a component. Fixed looping issues in the path settings.))
 }

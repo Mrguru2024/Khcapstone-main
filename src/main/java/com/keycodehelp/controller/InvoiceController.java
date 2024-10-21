@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import com.keycodehelp.entities.Invoice;
 import com.keycodehelp.services.InvoiceService;
 
-@CrossOrigin(origins = "http://localhost:3000")  // Adjust this to the frontend's URL if needed
+@CrossOrigin(origins = "http://localhost:3000")  // Adjust this to the frontend URL if needed
 @Controller
 @RequestMapping("/invoices")
 public class InvoiceController {

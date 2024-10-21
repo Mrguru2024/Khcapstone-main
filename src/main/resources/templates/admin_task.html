@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title th:text="${pageTitle}">Admin Tasks</title>
+  <link rel="stylesheet" th:href="@{/css/tailwind.css}">
 </head>
-<body>
-<h1>Admin Task Management</h1>
-<p>Welcome, admin! Here you can manage various administrative tasks.</p>
-
-<!-- Add your task management UI or data here -->
+<body class="bg-gray-100 text-gray-900">
+<header class="bg-gray-800 text-white py-4">
+  <h1 class="text-center text-3xl font-bold" th:text="${pageTitle}">Admin Task Management</h1>
+</header>
+<main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-4xl">
+  <p class="text-lg mb-4">Welcome, admin! Here you can manage various administrative tasks.</p>
+  <!-- Add task management UI here -->
+</main>
 </body>
 </html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoices</title>
+    <link rel="stylesheet" th:href="@{/css/tailwind.css}">
+</head>
+<body class="bg-gray-100 text-gray-900">
+<header class="bg-gray-800 text-white p-4">
+    <h1 class="text-center text-3xl font-bold">Invoice History</h1>
+    <li><a th:href="@{/logout}" class="hover:text-gray-300">Logout</a></li> <!-- Logout link -->
+</header>
+<main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-3xl">
+    <section>
+        <h2 class="text-2xl font-semibold mb-4">Your Invoices</h2>
+        <table class="min-w-full table-auto bg-white border-collapse">
+            <thead>
+            <tr class="bg-gray-800 text-white">
+                <th class="py-2 px-4">Invoice #</th>
+                <th class="py-2 px-4">Date</th>
+                <th class="py-2 px-4">Amount</th>
+                <th class="py-2 px-4">Status</th>
+                <th class="py-2 px-4">Download</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="border-t">
+                <td class="py-2 px-4">INV-00123</td>
+                <td class="py-2 px-4">2023-01-15</td>
+                <td class="py-2 px-4">$120.00</td>
+                <td class="py-2 px-4 text-green-600">Paid</td>
+                <td class="py-2 px-4">
+                    <a href="/invoices/INV-00123.pdf" class="text-blue-600 hover:underline">Download</a>
+                </td>
+            </tr>
+            <tr class="border-t">
+                <td class="py-2 px-4">INV-00124</td>
+                <td class="py-2 px-4">2023-02-01</td>
+                <td class="py-2 px-4">$90.00</td>
+                <td class="py-2 px-4 text-yellow-600">Pending</td>
+                <td class="py-2 px-4">
+                    <a href="/invoices/INV-00124.pdf" class="text-blue-600 hover:underline">Download</a>
+                </td>
+            </tr>
+            <!-- Add more rows as necessary -->
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>
